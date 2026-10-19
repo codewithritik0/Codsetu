@@ -1,4 +1,4 @@
-/* Digital Balaji - main stylesheet. Change brand colors in :root */
+/* Codsetu - main stylesheet. Change brand colors in :root */
 
 :root {
 
@@ -264,11 +264,21 @@ header {
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
+    .navbar {
+        padding: .4375rem 0;
+    }
+
     .navbar>.container>.navbar-brand img {
         display: block;
-        width: 115px;
+        width: 175px;
         height: auto
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar>.container>.navbar-brand img {
+        width: 160px;
     }
 }
 
@@ -594,15 +604,6 @@ header {
 
 
 @media (max-width: 991.98px) {
-
-    @media (max-width: 768px) {
-        .navbar>.container>.navbar-brand img {
-            display: block;
-            width: 115px;
-            height: auto
-        }
-    }
-
     .services-nav-item {
 
         width: 100%;

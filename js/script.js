@@ -1,4 +1,4 @@
-/* Digital Balaji - main script (vanilla JavaScript, no libraries) */
+/* Codsetu - main script (vanilla JavaScript, no libraries) */
 
 
 
