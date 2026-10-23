@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const focusable = [...dialog.querySelectorAll("button, input, select, textarea, [tabindex]:not([tabindex='-1'])")]
 
-          .filter(el => !el.disabled && el.getAttribute("aria-hidden") !== "true");
+          .filter(el => !el.disabled && el.tabIndex !== -1 && !el.closest(".form-honeypot"));
 
         const first = focusable[0];
 
@@ -430,7 +430,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    window.setTimeout(openConsultationPopup, 1000);
+    const popupStorageKey = "codsetuConsultationShown";
+    const popupAlreadyShown = () => {
+      try {
+        return sessionStorage.getItem(popupStorageKey) === "1";
+      } catch (error) {
+        return false;
+      }
+    };
+    const markPopupShown = () => {
+      try {
+        sessionStorage.setItem(popupStorageKey, "1");
+      } catch (error) {
+        /* sessionStorage can be unavailable */
+      }
+    };
+    const autoPopupAllowed = () => window.matchMedia("(min-width: 768px)").matches;
+    let autoPopupTimer = 0;
+    const openAutoPopup = () => {
+      if (!autoPopupAllowed() || popupAlreadyShown() || consultationPopup.classList.contains("is-open")) {
+        return;
+      }
+      markPopupShown();
+      window.clearTimeout(autoPopupTimer);
+      window.removeEventListener("scroll", onAutoPopupScroll);
+      openConsultationPopup();
+    };
+    const onAutoPopupScroll = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0 || window.scrollY / maxScroll < 0.5) {
+        return;
+      }
+      openAutoPopup();
+    };
+    document.querySelectorAll("[data-open-consultation]").forEach(trigger => {
+      trigger.addEventListener("click", event => {
+        event.preventDefault();
+        openConsultationPopup();
+      });
+    });
+    if (autoPopupAllowed() && !popupAlreadyShown()) {
+      autoPopupTimer = window.setTimeout(openAutoPopup, 20000);
+      window.addEventListener("scroll", onAutoPopupScroll, { passive: true });
+    }
 
   }
 
@@ -864,222 +906,113 @@ document.addEventListener("DOMContentLoaded", () => {
       // Submit form
 
       form.addEventListener("submit", async e => {
-
-
-
         e.preventDefault();
 
-
-
-
-
-        // Validate all required fields
-
-        const ok = [...form.elements]
-
-          .filter(el => el.name)
-
-          .map(check)
-
-          .every(Boolean);
-
-
-
-
-
-        if (!ok) {
-
-
-
-          if (status) {
-
-            status.textContent =
-
-              "Please fix the highlighted fields.";
-
-          }
-
-
-
+        const honeypot = form.querySelector('[name="company_website"]');
+        if (honeypot && honeypot.value.trim() !== "") {
           return;
         }
 
+        const ok = [...form.elements]
+          .filter(el => el.name && el.name !== "company_website")
+          .map(check)
+          .every(Boolean);
 
-
-
-
-        // Collect form data
-
-        const data = Object.fromEntries(
-
-          new FormData(form)
-
-        );
-
-
-
-
-
-        // Google Apps Script Web App URL
-
-        const endpoint =
-
-          "https://script.google.com/macros/s/AKfycbyUc1XfhFD2_DxP9E1xEyESgm-HOFSlIs04u8GcLAQSZaCbCWinOvYjBei3rJCwBSC33Q/exec";
-
-
-
-
-
-        // Show sending message
-
-        if (status) {
-
-          status.textContent =
-
-            "Sending your enquiry...";
-          status.classList.remove("form-status--success");
-
+        if (!ok) {
+          if (status) {
+            status.textContent = "Please fix the highlighted fields.";
+          }
+          return;
         }
 
+        const data = Object.fromEntries(new FormData(form));
+        delete data.company_website;
 
+        const endpoint = "https://script.google.com/macros/s/AKfycbyUc1XfhFD2_DxP9E1xEyESgm-HOFSlIs04u8GcLAQSZaCbCWinOvYjBei3rJCwBSC33Q/exec";
 
+        if (status) {
+          status.textContent = "Sending your enquiry...";
+          status.classList.remove("form-status--success");
+        }
 
+        const showLeadError = () => {
+          if (!status) {
+            window.alert("We could not send your enquiry. Message us on WhatsApp at https://wa.me/919354141385 or call 9354141385.");
+            return;
+          }
+          status.classList.remove("form-status--success");
+          status.replaceChildren();
+          const whatsapp = document.createElement("a");
+          whatsapp.href = "https://wa.me/919354141385?text=" + encodeURIComponent("Hi CodSetu IT Solution, I'd like to know about your services.");
+          whatsapp.target = "_blank";
+          whatsapp.rel = "noopener";
+          whatsapp.textContent = "WhatsApp";
+          const phone = document.createElement("a");
+          phone.href = "tel:+919354141385";
+          phone.textContent = "9354141385";
+          status.append(
+            document.createTextNode("We could not send your enquiry. Message us on "),
+            whatsapp,
+            document.createTextNode(" or call "),
+            phone,
+            document.createTextNode(".")
+          );
+        };
 
         try {
-
-
-
-          // Send data in background
-
-          const submission = fetch(endpoint, {
-
+          await fetch(endpoint, {
             method: "POST",
-
             mode: "no-cors",
-
             headers: {
-
               "Content-Type": "application/x-www-form-urlencoded"
-
             },
-
             body: new URLSearchParams(data)
-
           });
 
-
+          if (typeof window.gtag === "function") {
+            const formName = form.id || (form.classList.contains("consultation-popup__form") ? "consultation" : "newsletter");
+            window.gtag("event", "generate_lead", {
+              method: "form",
+              form_name: formName
+            });
+          }
 
           const popup = form.closest(".consultation-popup");
-
-
-
           if (popup) {
-
-            submission.then(() => {
-
-              if (status) {
-
-                status.textContent = "🎉 Thank You! Your enquiry has been submitted successfully.";
-                status.classList.add("form-status--success");
-
-              }
-
-              celebrateLeadSubmission();
-
-              form.reset();
-
-              form.querySelectorAll(".is-valid, .is-invalid").forEach(field => {
-
-                field.classList.remove("is-valid", "is-invalid");
-
-              });
-
-
-
-              popupCloseTimer = window.setTimeout(() => {
-
-                popup.querySelector(".consultation-popup__close").click();
-
-              }, 1800);
-
-            }).catch(error => {
-
-              console.error("Form submission error:", error);
-
-              if (status) {
-
-                status.textContent = "We could not submit your enquiry. Please try again.";
-
-              }
-
+            if (status) {
+              status.textContent = "🎉 Thank You! Your enquiry has been submitted successfully.";
+              status.classList.add("form-status--success");
+            }
+            celebrateLeadSubmission();
+            form.reset();
+            form.querySelectorAll(".is-valid, .is-invalid").forEach(field => {
+              field.classList.remove("is-valid", "is-invalid");
             });
-
-
-
+            popupCloseTimer = window.setTimeout(() => {
+              popup.querySelector(".consultation-popup__close").click();
+            }, 1800);
             return;
-
           }
 
           if (isLeadForm) {
-            try {
-              await submission;
-
-              if (status) {
-                status.textContent = "🎉 Thank You! Your enquiry has been submitted successfully.";
-                status.classList.add("form-status--success");
-              }
-
-              celebrateLeadSubmission();
-              form.reset();
-              form.querySelectorAll(".is-valid, .is-invalid").forEach(field => {
-                field.classList.remove("is-valid", "is-invalid");
-              });
-            } catch (error) {
-              console.error("Form submission error:", error);
-
-              if (status) {
-                status.textContent = "We could not submit your enquiry. Please try again.";
-                status.classList.remove("form-status--success");
-              }
+            if (status) {
+              status.textContent = "🎉 Thank You! Your enquiry has been submitted successfully.";
+              status.classList.add("form-status--success");
             }
-
+            celebrateLeadSubmission();
+            form.reset();
+            form.querySelectorAll(".is-valid, .is-invalid").forEach(field => {
+              field.classList.remove("is-valid", "is-invalid");
+            });
             return;
           }
 
-
-          submission.catch(error => {
-
-            console.error("Form submission error:", error);
-
-          });
-
-
-
-          // Preserve the existing newsletter submission behavior.
-
-          alert("Thank you! Your enquiry has been submitted successfully.");
-
+          window.alert("Thank you! Your enquiry has been submitted successfully.");
           form.reset();
-
-
-
         } catch (error) {
-
-
-
           console.error("Form submission error:", error);
-
-          if (isLeadForm && status) {
-            status.textContent = "We could not submit your enquiry. Please try again.";
-            status.classList.remove("form-status--success");
-          }
-
-
-
+          showLeadError();
         }
-
-
-
       });
 
 
@@ -1089,6 +1022,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+
+
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if (!link || typeof window.gtag !== "function") {
+      return;
+    }
+    const href = link.getAttribute("href") || "";
+    let contactMethod = "";
+    if (href.startsWith("tel:")) {
+      contactMethod = "phone";
+    } else if (href.includes("wa.me")) {
+      contactMethod = "whatsapp";
+    } else if (href.startsWith("mailto:")) {
+      contactMethod = "email";
+    }
+    if (!contactMethod) {
+      return;
+    }
+    window.gtag("event", "contact_click", {
+      contact_method: contactMethod,
+      link_url: href
+    });
+  });
 
 const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const touchQuery = window.matchMedia('(pointer: coarse)');
