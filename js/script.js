@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const focusable = [...dialog.querySelectorAll("button, input, select, textarea, [tabindex]:not([tabindex='-1'])")]
 
-          .filter(el => !el.disabled && el.tabIndex !== -1 && !el.closest(".form-honeypot"));
+          .filter(el => !el.disabled && el.tabIndex !== -1);
 
         const first = focusable[0];
 
@@ -908,13 +908,8 @@ document.addEventListener("DOMContentLoaded", () => {
       form.addEventListener("submit", async e => {
         e.preventDefault();
 
-        const honeypot = form.querySelector('[name="company_website"]');
-        if (honeypot && honeypot.value.trim() !== "") {
-          return;
-        }
-
         const ok = [...form.elements]
-          .filter(el => el.name && el.name !== "company_website")
+          .filter(el => el.name)
           .map(check)
           .every(Boolean);
 
@@ -926,7 +921,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const data = Object.fromEntries(new FormData(form));
-        delete data.company_website;
 
         const endpoint = "https://script.google.com/macros/s/AKfycbyUc1XfhFD2_DxP9E1xEyESgm-HOFSlIs04u8GcLAQSZaCbCWinOvYjBei3rJCwBSC33Q/exec";
 
