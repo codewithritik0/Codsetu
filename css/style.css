@@ -2642,12 +2642,16 @@ body.cursor-visible .cursor-ring {
 }
 
 .team-page .page-hero {
-    background: linear-gradient(135deg, rgba(15, 45, 92, 0.96), rgba(37, 99, 235, 0.9));
+    background: linear-gradient(135deg, var(--primary), #0EA5E9);
 }
 
-.team-page .page-hero h1,
+.team-page .page-hero h1 {
+    color: #fff;
+}
+
 .team-page .page-hero p {
-    color: #ffffff;
+    color: #fff;
+    opacity: .92;
 }
 
 
