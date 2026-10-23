@@ -2645,6 +2645,10 @@ body.cursor-visible .cursor-ring {
     background: linear-gradient(135deg, rgba(15, 45, 92, 0.96), rgba(37, 99, 235, 0.9));
 }
 
+.team-page .page-hero h1 {
+    color: #ffffff;
+}
+
 
 /* ============================================================
    Non-colour polish. Colours and gradients stay as on main.
