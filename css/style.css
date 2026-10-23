@@ -2889,43 +2889,8 @@ a.social-edge__item {
 
 @media (max-width: 767.98px) {
     .social-edge {
-        gap: 6px;
+        display: none;
     }
-
-    .social-edge__item {
-        width: 36px;
-        height: 36px;
-        border-radius: 18px 0 0 18px;
-        font-size: .82rem;
-        transform: translateX(6px);
-    }
-
-    .social-edge__item i {
-        flex-basis: 36px;
-        width: 36px;
-        font-size: .95rem;
-    }
-
-    .social-edge__item--instagram:hover,
-    .social-edge__item--instagram:focus-visible { width: 128px; }
-
-    .social-edge__item--facebook:hover,
-    .social-edge__item--facebook:focus-visible { width: 122px; }
-
-    .social-edge__item--whatsapp:hover,
-    .social-edge__item--whatsapp:focus-visible { width: 126px; }
-
-    .social-edge__item--linkedin:hover,
-    .social-edge__item--linkedin:focus-visible { width: 116px; }
-
-    .social-edge__item--youtube:hover,
-    .social-edge__item--youtube:focus-visible { width: 114px; }
-
-    .social-edge__item--x:hover,
-    .social-edge__item--x:focus-visible { width: 72px; }
-
-    .social-edge__item--behance:hover,
-    .social-edge__item--behance:focus-visible { width: 118px; }
 }
 
 @media (max-height: 720px) {
