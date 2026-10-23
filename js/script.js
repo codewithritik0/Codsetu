@@ -430,49 +430,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    const popupStorageKey = "codsetuConsultationShown";
-    const popupAlreadyShown = () => {
-      try {
-        return sessionStorage.getItem(popupStorageKey) === "1";
-      } catch (error) {
-        return false;
-      }
-    };
-    const markPopupShown = () => {
-      try {
-        sessionStorage.setItem(popupStorageKey, "1");
-      } catch (error) {
-        /* sessionStorage can be unavailable */
-      }
-    };
-    const autoPopupAllowed = () => window.matchMedia("(min-width: 768px)").matches;
-    let autoPopupTimer = 0;
-    const openAutoPopup = () => {
-      if (!autoPopupAllowed() || popupAlreadyShown() || consultationPopup.classList.contains("is-open")) {
-        return;
-      }
-      markPopupShown();
-      window.clearTimeout(autoPopupTimer);
-      window.removeEventListener("scroll", onAutoPopupScroll);
-      openConsultationPopup();
-    };
-    const onAutoPopupScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (maxScroll <= 0 || window.scrollY / maxScroll < 0.5) {
-        return;
-      }
-      openAutoPopup();
-    };
     document.querySelectorAll("[data-open-consultation]").forEach(trigger => {
       trigger.addEventListener("click", event => {
         event.preventDefault();
         openConsultationPopup();
       });
     });
-    if (autoPopupAllowed() && !popupAlreadyShown()) {
-      autoPopupTimer = window.setTimeout(openAutoPopup, 20000);
-      window.addEventListener("scroll", onAutoPopupScroll, { passive: true });
-    }
+    window.setTimeout(openConsultationPopup, 1000);
 
   }
 
