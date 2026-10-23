@@ -1567,6 +1567,16 @@ body.consultation-popup-open {
     }
 }
 
+@media (min-width: 768px) {
+    .whatsapp-float {
+        display: none;
+    }
+
+    .back-to-top {
+        bottom: 1.5rem;
+    }
+}
+
 .team-avatar {
     width: 72px;
     height: 72px;
@@ -2816,7 +2826,7 @@ body.cursor-visible .cursor-ring {
     cursor: default;
     pointer-events: auto;
     transform: translateX(8px);
-    transition: width .3s ease, transform .3s ease;
+    transition: width .6s ease-in-out, transform .6s ease-in-out;
 }
 
 a.social-edge__item {
@@ -2847,6 +2857,7 @@ a.social-edge__item {
 .social-edge__item:focus-visible {
     color: #334155;
     transform: translateX(0);
+    transition-delay: .1s;
 }
 
 .social-edge__item--instagram:hover,
