@@ -2793,3 +2793,151 @@ body.cursor-visible .cursor-ring {
         transform: none;
     }
 }
+
+/* Right-edge social tabs. Overlay only; does not change page layout. */
+.social-edge {
+    position: fixed;
+    z-index: 1020;
+    right: 0;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.social-edge__item {
+    display: flex;
+    align-items: center;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+    border-radius: 23px 0 0 23px;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(15, 45, 92, .16);
+    color: #334155;
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: default;
+    pointer-events: auto;
+    transform: translateX(8px);
+    transition: width .3s ease, transform .3s ease;
+}
+
+a.social-edge__item {
+    cursor: pointer;
+}
+
+.social-edge__item i {
+    flex: 0 0 46px;
+    width: 46px;
+    text-align: center;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.social-edge__name {
+    padding-right: 1rem;
+}
+
+.social-edge__item--instagram i { color: #E1306C; }
+.social-edge__item--facebook i { color: #1877F2; }
+.social-edge__item--whatsapp i { color: #25D366; }
+.social-edge__item--linkedin i { color: #0A66C2; }
+.social-edge__item--youtube i { color: #FF0000; }
+.social-edge__item--x i { color: #000; }
+.social-edge__item--behance i { color: #1769FF; }
+
+.social-edge__item:hover,
+.social-edge__item:focus-visible {
+    color: #334155;
+    transform: translateX(0);
+}
+
+.social-edge__item--instagram:hover,
+.social-edge__item--instagram:focus-visible { width: 158px; }
+
+.social-edge__item--facebook:hover,
+.social-edge__item--facebook:focus-visible { width: 150px; }
+
+.social-edge__item--whatsapp:hover,
+.social-edge__item--whatsapp:focus-visible { width: 156px; }
+
+.social-edge__item--linkedin:hover,
+.social-edge__item--linkedin:focus-visible { width: 142px; }
+
+.social-edge__item--youtube:hover,
+.social-edge__item--youtube:focus-visible { width: 140px; }
+
+.social-edge__item--x:hover,
+.social-edge__item--x:focus-visible { width: 84px; }
+
+.social-edge__item--behance:hover,
+.social-edge__item--behance:focus-visible { width: 146px; }
+
+.social-edge__item:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+@media (max-width: 767.98px) {
+    .social-edge {
+        gap: 6px;
+    }
+
+    .social-edge__item {
+        width: 36px;
+        height: 36px;
+        border-radius: 18px 0 0 18px;
+        font-size: .82rem;
+        transform: translateX(6px);
+    }
+
+    .social-edge__item i {
+        flex-basis: 36px;
+        width: 36px;
+        font-size: .95rem;
+    }
+
+    .social-edge__item--instagram:hover,
+    .social-edge__item--instagram:focus-visible { width: 128px; }
+
+    .social-edge__item--facebook:hover,
+    .social-edge__item--facebook:focus-visible { width: 122px; }
+
+    .social-edge__item--whatsapp:hover,
+    .social-edge__item--whatsapp:focus-visible { width: 126px; }
+
+    .social-edge__item--linkedin:hover,
+    .social-edge__item--linkedin:focus-visible { width: 116px; }
+
+    .social-edge__item--youtube:hover,
+    .social-edge__item--youtube:focus-visible { width: 114px; }
+
+    .social-edge__item--x:hover,
+    .social-edge__item--x:focus-visible { width: 72px; }
+
+    .social-edge__item--behance:hover,
+    .social-edge__item--behance:focus-visible { width: 118px; }
+}
+
+@media (max-height: 720px) {
+    .social-edge {
+        top: auto;
+        bottom: 10.5rem;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .social-edge__item {
+        transition: none;
+    }
+}
