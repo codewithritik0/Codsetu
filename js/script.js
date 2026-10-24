@@ -1155,11 +1155,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const restingRects = () => {
     const top = (window.innerHeight - bar.offsetHeight) / 2;
+    const size = 64;
+    const visible = size - 20;
     return icons.map(icon => {
-      const width = icon.offsetWidth;
-      const left = window.innerWidth - 12 - width;
       const iconTop = top + icon.offsetTop;
-      return { left, top: iconTop, right: left + width, bottom: iconTop + icon.offsetHeight };
+      const left = window.innerWidth - visible;
+      return { left, top: iconTop, right: window.innerWidth, bottom: iconTop + size };
     });
   };
 
