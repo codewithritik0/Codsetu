@@ -2806,7 +2806,7 @@ body.cursor-visible .cursor-ring {
     align-items: flex-end;
     gap: 14px;
     margin: 0;
-    padding: 42px 0;
+    padding: 42px 10px 42px 0;
     transform: translateY(-50%);
     pointer-events: none;
     overflow: clip;
@@ -2864,18 +2864,26 @@ body.cursor-visible .cursor-ring {
 }
 
 .social-edge__item i {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 18px;
     height: 18px;
     margin: 0;
     padding: 0;
     font-size: 18px;
     line-height: 1;
+    text-align: center;
+    transform: translateY(1px);
 }
 
 .social-edge__item i::before {
     display: block;
+    width: 18px;
+    margin: 0;
+    padding: 0;
     line-height: 1;
+    text-align: center;
 }
 
 .social-edge__name {
@@ -2901,10 +2909,10 @@ body.cursor-visible .cursor-ring {
 
 .social-edge__item--facebook i { color: #1877F2; }
 .social-edge__item--whatsapp i { color: #25D366; }
-.social-edge__item--linkedin i { color: #E02424; }
-.social-edge__item--youtube i { color: #FF0000; }
+.social-edge__item--linkedin i { color: #E02424; transform: translateY(2px); }
+.social-edge__item--youtube i { color: #FF0000; transform: translate(-1px, 1px); }
 .social-edge__item--x i { color: #1DA1F2; }
-.social-edge__item--behance i { color: #E4572E; }
+.social-edge__item--behance i { color: #E4572E; transform: translate(-1px, 1px); }
 
 .social-edge__item:focus-visible {
     outline: none;
