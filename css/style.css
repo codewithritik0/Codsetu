@@ -2807,6 +2807,7 @@ body.cursor-visible .cursor-ring {
     padding: 0;
     transform: translateY(-50%);
     pointer-events: none;
+    transition: transform .45s ease;
 }
 
 .social-edge__item {
@@ -2828,6 +2829,14 @@ body.cursor-visible .cursor-ring {
     transition: width .5s ease, transform .5s ease, box-shadow .5s ease;
 }
 
+.social-edge__item:hover,
+.social-edge__item:focus,
+.social-edge__item:focus-visible,
+.social-edge__item:active {
+    color: #243044;
+    text-decoration: none;
+}
+
 .social-edge__icon {
     display: grid;
     flex: 0 0 var(--social-size);
@@ -2843,6 +2852,7 @@ body.cursor-visible .cursor-ring {
 
 .social-edge__name {
     padding-right: 1.05rem;
+    color: #243044;
     opacity: 0;
     transform: translateX(8px);
     transition: opacity .45s ease, transform .5s ease;
@@ -2921,15 +2931,25 @@ body.cursor-visible .cursor-ring {
     .social-edge__item--behance { --social-open: 128px; }
 }
 
+/* Slide the whole column aside only while it would sit on a form control. */
+.social-edge.is-aside {
+    transform: translateY(-50%) translateX(calc(100% + 16px));
+}
+
 @media (max-width: 768px) and (max-height: 700px) {
     .social-edge {
         top: auto;
         bottom: 7.25rem;
         transform: none;
     }
+
+    .social-edge.is-aside {
+        transform: translateX(calc(100% + 16px));
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .social-edge,
     .social-edge__item,
     .social-edge__name {
         transition: none;
