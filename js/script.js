@@ -1134,12 +1134,13 @@ if (testimonialCards.length) {
   });
 }
 
-/* Keep the right-edge social column off form controls. Desktop stays put when there is room. */
+/* On desktop, slide the social column aside only while it would sit on a form control. */
 document.addEventListener('DOMContentLoaded', () => {
   const bar = document.querySelector('.social-edge');
   if (!bar) return;
 
   const icons = [...bar.querySelectorAll('.social-edge__item')];
+  const mobileQuery = window.matchMedia('(max-width: 768px)');
   let frame = 0;
 
   const shown = el => {
@@ -1153,16 +1154,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const restingRects = () => {
-    const short = window.matchMedia('(max-width: 768px) and (max-height: 700px)').matches;
-    const mobile = window.matchMedia('(max-width: 768px)').matches;
-    const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    const top = short
-      ? window.innerHeight - bar.offsetHeight - (7.25 * root)
-      : (window.innerHeight - bar.offsetHeight) / 2;
-    const rightInset = mobile ? 0 : 12;
+    const top = (window.innerHeight - bar.offsetHeight) / 2;
     return icons.map(icon => {
       const width = icon.offsetWidth;
-      const left = window.innerWidth - rightInset - width;
+      const left = window.innerWidth - 12 - width;
       const iconTop = top + icon.offsetTop;
       return { left, top: iconTop, right: left + width, bottom: iconTop + icon.offsetHeight };
     });
@@ -1181,6 +1176,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const place = () => {
     frame = 0;
+    if (mobileQuery.matches) {
+      bar.classList.remove('is-aside');
+      return;
+    }
     bar.classList.toggle('is-aside', overlapsForm());
   };
 
