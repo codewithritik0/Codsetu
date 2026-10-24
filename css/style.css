@@ -2909,43 +2909,13 @@ body.cursor-visible .cursor-ring {
 
 @media (max-width: 768px) {
     .social-edge {
-        --social-size: 42px;
-        right: 0;
-        gap: 12px;
+        display: none;
     }
-
-    .social-edge__item i {
-        font-size: 1.1rem;
-    }
-
-    .social-edge__name {
-        font-size: .82rem;
-    }
-
-    .social-edge__item--instagram { --social-open: 140px; }
-    .social-edge__item--facebook { --social-open: 128px; }
-    .social-edge__item--whatsapp { --social-open: 136px; }
-    .social-edge__item--linkedin { --social-open: 124px; }
-    .social-edge__item--youtube { --social-open: 124px; }
-    .social-edge__item--x { --social-open: 118px; }
-    .social-edge__item--behance { --social-open: 128px; }
 }
 
-/* Slide the whole column aside only while it would sit on a form control. */
+/* Slide the column aside on desktop only while it would sit on a form control. */
 .social-edge.is-aside {
     transform: translateY(-50%) translateX(calc(100% + 16px));
-}
-
-@media (max-width: 768px) and (max-height: 700px) {
-    .social-edge {
-        top: auto;
-        bottom: 7.25rem;
-        transform: none;
-    }
-
-    .social-edge.is-aside {
-        transform: translateX(calc(100% + 16px));
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
