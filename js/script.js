@@ -320,7 +320,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    const popupSessionKey = "codsetu_popup_shown";
+
+    const popupWasShown = () => {
+      try {
+        return window.sessionStorage.getItem(popupSessionKey) === "1";
+      } catch (error) {
+        return false;
+      }
+    };
+
+    const rememberPopupShown = () => {
+      try {
+        window.sessionStorage.setItem(popupSessionKey, "1");
+      } catch (error) {
+        /* Private browsing can block sessionStorage. */
+      }
+    };
+
+    let popupAutoTimer = 0;
+    let popupAutoScroll = null;
+
+    const stopPopupAutoOpen = () => {
+      if (popupAutoTimer) {
+        window.clearTimeout(popupAutoTimer);
+        popupAutoTimer = 0;
+      }
+      if (popupAutoScroll) {
+        window.removeEventListener("scroll", popupAutoScroll);
+        popupAutoScroll = null;
+      }
+    };
+
     const openConsultationPopup = () => {
+      rememberPopupShown();
+      stopPopupAutoOpen();
 
       previousPopupFocus = document.activeElement;
 
@@ -436,7 +470,33 @@ document.addEventListener("DOMContentLoaded", () => {
         openConsultationPopup();
       });
     });
-    window.setTimeout(openConsultationPopup, 1000);
+    if (!popupWasShown()) {
+      const scrollableHeight = () => Math.max(
+        0,
+        Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight
+      );
+
+      const openFromScrollOrTime = () => {
+        if (popupWasShown()) {
+          stopPopupAutoOpen();
+          return;
+        }
+        openConsultationPopup();
+      };
+
+      popupAutoScroll = () => {
+        const distance = scrollableHeight();
+        if (distance <= 0) {
+          return;
+        }
+        if (window.scrollY >= distance * 0.3) {
+          openFromScrollOrTime();
+        }
+      };
+
+      popupAutoTimer = window.setTimeout(openFromScrollOrTime, 9000);
+      window.addEventListener("scroll", popupAutoScroll, { passive: true });
+    }
 
   }
 
