@@ -2795,7 +2795,6 @@ body.cursor-visible .cursor-ring {
 /* Right-edge social pills. Fixed overlay; below the popup (2000) and confetti (3000). */
 .social-edge {
     --social-size: 64px;
-    --social-clip: 20px;
     --social-open: 232px;
     position: fixed;
     z-index: 1020;
@@ -2824,8 +2823,6 @@ body.cursor-visible .cursor-ring {
     color: #243044;
     text-decoration: none;
     pointer-events: auto;
-    transform: translateX(var(--social-clip));
-    transition: transform .5s ease;
 }
 
 .social-edge__item:hover,
@@ -2851,22 +2848,34 @@ body.cursor-visible .cursor-ring {
 }
 
 .social-edge__icon {
-    display: grid;
+    display: flex;
     flex: 0 0 var(--social-size);
+    align-items: center;
+    justify-content: center;
     width: var(--social-size);
     height: var(--social-size);
-    place-items: center;
+    margin: 0;
+    padding: 0;
     border-radius: 50%;
     background: #fff;
+    line-height: 0;
     position: relative;
     z-index: 1;
 }
 
 .social-edge__item i {
-    font-size: 1.7rem;
+    display: block;
+    width: 19px;
+    height: 19px;
+    margin: 0;
+    padding: 0;
+    font-size: 19px;
     line-height: 1;
-    transform: translateX(-10px);
-    transition: transform .5s ease;
+}
+
+.social-edge__item i::before {
+    display: block;
+    line-height: 1;
 }
 
 .social-edge__name {
@@ -2898,7 +2907,6 @@ body.cursor-visible .cursor-ring {
 .social-edge__item--behance i { color: #E4572E; }
 
 .social-edge__item:focus-visible {
-    transform: translateX(0);
     outline: none;
 }
 
@@ -2912,29 +2920,17 @@ body.cursor-visible .cursor-ring {
     box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
 }
 
-.social-edge__item:focus-visible i {
-    transform: translateX(0);
-}
-
 .social-edge__item:focus-visible .social-edge__name {
     opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .social-edge__item:hover {
-        transform: translateX(0);
-    }
-
     .social-edge__item:hover .social-edge__pill {
         width: var(--social-open);
     }
 
     .social-edge__item:hover .social-edge__icon {
         box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
-    }
-
-    .social-edge__item:hover i {
-        transform: translateX(0);
     }
 
     .social-edge__item:hover .social-edge__name {
@@ -2955,9 +2951,7 @@ body.cursor-visible .cursor-ring {
 
 @media (prefers-reduced-motion: reduce) {
     .social-edge,
-    .social-edge__item,
     .social-edge__pill,
-    .social-edge__item i,
     .social-edge__name {
         transition: none;
     }
