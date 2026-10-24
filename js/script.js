@@ -1133,3 +1133,63 @@ if (testimonialCards.length) {
     dot.addEventListener('click', () => updateTestimonials(Number(dot.dataset.slide)));
   });
 }
+
+/* Keep the right-edge social column off form controls. Desktop stays put when there is room. */
+document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.querySelector('.social-edge');
+  if (!bar) return;
+
+  const icons = [...bar.querySelectorAll('.social-edge__item')];
+  let frame = 0;
+
+  const shown = el => {
+    if (el.closest('.consultation-popup')) return false;
+    for (let node = el; node && node !== document.documentElement; node = node.parentElement) {
+      const style = getComputedStyle(node);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) return false;
+    }
+    const rect = el.getBoundingClientRect();
+    return rect.width > 1 && rect.height > 1;
+  };
+
+  const restingRects = () => {
+    const short = window.matchMedia('(max-width: 768px) and (max-height: 700px)').matches;
+    const mobile = window.matchMedia('(max-width: 768px)').matches;
+    const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const top = short
+      ? window.innerHeight - bar.offsetHeight - (7.25 * root)
+      : (window.innerHeight - bar.offsetHeight) / 2;
+    const rightInset = mobile ? 0 : 12;
+    return icons.map(icon => {
+      const width = icon.offsetWidth;
+      const left = window.innerWidth - rightInset - width;
+      const iconTop = top + icon.offsetTop;
+      return { left, top: iconTop, right: left + width, bottom: iconTop + icon.offsetHeight };
+    });
+  };
+
+  const overlapsForm = () => {
+    const controls = [...document.querySelectorAll('form input, form textarea, form select, form button')].filter(shown);
+    if (!controls.length) return false;
+    return restingRects().some(icon => controls.some(control => {
+      const rect = control.getBoundingClientRect();
+      const overlapX = Math.min(icon.right, rect.right) - Math.max(icon.left, rect.left);
+      const overlapY = Math.min(icon.bottom, rect.bottom) - Math.max(icon.top, rect.top);
+      return overlapX > 1 && overlapY > 1;
+    }));
+  };
+
+  const place = () => {
+    frame = 0;
+    bar.classList.toggle('is-aside', overlapsForm());
+  };
+
+  const schedule = () => {
+    if (frame) return;
+    frame = window.requestAnimationFrame(place);
+  };
+
+  place();
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+});
