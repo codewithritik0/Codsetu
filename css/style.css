@@ -1,4 +1,5 @@
 /* Codsetu - main stylesheet. Change brand colors in :root */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap");
 
 :root {
 
@@ -2792,34 +2793,37 @@ body.cursor-visible .cursor-ring {
     }
 }
 
-/* Right-edge social pills. Fixed overlay; below the popup (2000) and confetti (3000). */
+/* Right-edge social tabs. Fixed overlay; below the popup (2000) and confetti (3000). */
 .social-edge {
-    --social-size: 60px;
-    --social-open: 232px;
+    --social-h: 60px;
+    --social-open-h: 64px;
+    --social-visible: 66px;
+    --social-overhang: 32px;
+    --social-rest: calc(var(--social-visible) + var(--social-overhang));
+    --social-open: calc(220px + var(--social-overhang));
+    --social-icon: 38px;
     position: fixed;
     z-index: 1020;
     top: 50%;
     right: 0;
-    left: auto;
-    box-sizing: border-box;
-    width: 70px;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 14px;
+    gap: 15px;
     margin: 0;
-    padding: 42px 0 42px 10px;
+    padding: 48px 0;
     transform: translateY(-50%);
     pointer-events: none;
-    overflow: visible;
-    transition: transform .5s ease;
+    overflow: clip;
+    transition: transform .45s ease;
 }
 
 .social-edge__item {
     position: relative;
     display: block;
-    width: var(--social-size);
-    height: var(--social-size);
+    width: var(--social-visible);
+    height: var(--social-h);
     margin: 0;
     padding: 0;
     color: #243044;
@@ -2838,50 +2842,52 @@ body.cursor-visible .cursor-ring {
 .social-edge__pill {
     position: absolute;
     top: 0;
-    right: 0;
+    right: calc(var(--social-overhang) * -1);
     display: flex;
     align-items: center;
-    width: var(--social-size);
-    height: var(--social-size);
+    width: var(--social-rest);
+    height: var(--social-h);
+    overflow: hidden;
     border-radius: 999px;
     background: #fff;
-    box-shadow: 0 10px 28px rgba(120, 128, 140, .30), 0 2px 8px rgba(120, 128, 140, .14);
-    transition: width .5s ease, box-shadow .5s ease;
+    box-shadow: -10px 12px 28px rgba(125, 132, 145, .32), -2px 4px 10px rgba(125, 132, 145, .16);
+    transition: width .45s ease, height .45s ease, top .45s ease, box-shadow .45s ease;
 }
 
 .social-edge__icon {
     display: flex;
-    flex: 0 0 var(--social-size);
+    flex: 0 0 var(--social-h);
     align-items: center;
     justify-content: center;
-    width: var(--social-size);
-    height: var(--social-size);
+    width: var(--social-h);
+    height: var(--social-h);
     margin: 0;
     padding: 0;
     border-radius: 50%;
-    background: #fff;
+    background: transparent;
+    box-shadow: none;
     line-height: 0;
     position: relative;
     z-index: 1;
+    transition: width .45s ease, height .45s ease, flex-basis .45s ease, margin .45s ease, background-color .45s ease, box-shadow .45s ease;
 }
 
 .social-edge__item i {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     margin: 0;
     padding: 0;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1;
     text-align: center;
-    transform: translateY(1px);
 }
 
 .social-edge__item i::before {
     display: block;
-    width: 18px;
+    width: 15px;
     margin: 0;
     padding: 0;
     line-height: 1;
@@ -2889,16 +2895,16 @@ body.cursor-visible .cursor-ring {
 }
 
 .social-edge__name {
-    padding-right: 1.35rem;
-    padding-left: .45rem;
+    padding-right: calc(var(--social-overhang) + 18px);
+    padding-left: 12px;
     color: #243044;
     font-family: 'Poppins', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 400;
     line-height: 1;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity .5s ease;
+    transition: opacity .45s ease;
 }
 
 .social-edge__item--instagram i::before {
@@ -2911,23 +2917,31 @@ body.cursor-visible .cursor-ring {
 
 .social-edge__item--facebook i { color: #1877F2; }
 .social-edge__item--whatsapp i { color: #25D366; }
-.social-edge__item--linkedin i { color: #E02424; transform: translateY(2px); }
-.social-edge__item--youtube i { color: #FF0000; transform: translate(-1px, 1px); }
+.social-edge__item--linkedin i { color: #E02424; transform: translateY(1px); }
+.social-edge__item--youtube i { color: #FF0000; transform: translateX(-0.5px); }
 .social-edge__item--x i { color: #1DA1F2; }
-.social-edge__item--behance i { color: #E4572E; transform: translate(-1px, 1px); }
+.social-edge__item--behance i { color: #E4572E; transform: translateX(-1px); }
 
 .social-edge__item:focus-visible {
     outline: none;
 }
 
 .social-edge__item:focus-visible .social-edge__pill {
+    top: -2px;
     width: var(--social-open);
+    height: var(--social-open-h);
+    box-shadow: -12px 16px 40px rgba(110, 118, 130, .38), -3px 6px 14px rgba(110, 118, 130, .2);
     outline: 3px solid var(--accent);
     outline-offset: 3px;
 }
 
 .social-edge__item:focus-visible .social-edge__icon {
-    box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
+    flex-basis: var(--social-icon);
+    width: var(--social-icon);
+    height: var(--social-icon);
+    margin-left: 13px;
+    background: #f3f4f6;
+    box-shadow: 0 2px 8px rgba(90, 100, 115, .22);
 }
 
 .social-edge__item:focus-visible .social-edge__name {
@@ -2936,11 +2950,19 @@ body.cursor-visible .cursor-ring {
 
 @media (hover: hover) and (pointer: fine) {
     .social-edge__item:hover .social-edge__pill {
+        top: -2px;
         width: var(--social-open);
+        height: var(--social-open-h);
+        box-shadow: -12px 16px 40px rgba(110, 118, 130, .38), -3px 6px 14px rgba(110, 118, 130, .2);
     }
 
     .social-edge__item:hover .social-edge__icon {
-        box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
+        flex-basis: var(--social-icon);
+        width: var(--social-icon);
+        height: var(--social-icon);
+        margin-left: 13px;
+        background: #f3f4f6;
+        box-shadow: 0 2px 8px rgba(90, 100, 115, .22);
     }
 
     .social-edge__item:hover .social-edge__name {
@@ -2962,6 +2984,7 @@ body.cursor-visible .cursor-ring {
 @media (prefers-reduced-motion: reduce) {
     .social-edge,
     .social-edge__pill,
+    .social-edge__icon,
     .social-edge__name {
         transition: none;
     }
