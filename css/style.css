@@ -2792,41 +2792,40 @@ body.cursor-visible .cursor-ring {
     }
 }
 
-/* Right-edge social pills. Overlay only; sits below the popup and confetti. */
+/* Right-edge social pills. Fixed overlay; below the popup (2000) and confetti (3000). */
 .social-edge {
-    --social-size: 54px;
+    --social-size: 64px;
+    --social-clip: 20px;
+    --social-open: 232px;
     position: fixed;
     z-index: 1020;
-    right: 12px;
     top: 50%;
+    right: 0;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 14px;
     margin: 0;
-    padding: 0;
+    padding: 42px 0;
     transform: translateY(-50%);
     pointer-events: none;
-    transition: transform .45s ease;
+    overflow: clip;
+    transition: transform .5s ease;
 }
 
 .social-edge__item {
-    display: flex;
-    align-items: center;
+    position: relative;
+    display: block;
     width: var(--social-size);
     height: var(--social-size);
-    overflow: hidden;
-    border-radius: 999px;
-    background: #fff;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .14);
+    margin: 0;
+    padding: 0;
     color: #243044;
-    font-weight: 600;
-    font-size: .95rem;
-    line-height: 1;
-    white-space: nowrap;
     text-decoration: none;
     pointer-events: auto;
-    transition: width .5s ease, transform .5s ease, box-shadow .5s ease;
+    transform: translateX(var(--social-clip));
+    transition: transform .5s ease;
 }
 
 .social-edge__item:hover,
@@ -2837,34 +2836,51 @@ body.cursor-visible .cursor-ring {
     text-decoration: none;
 }
 
+.social-edge__pill {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    width: var(--social-size);
+    height: var(--social-size);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(120, 128, 140, .30), 0 2px 8px rgba(120, 128, 140, .14);
+    transition: width .5s ease, box-shadow .5s ease;
+}
+
 .social-edge__icon {
     display: grid;
     flex: 0 0 var(--social-size);
     width: var(--social-size);
     height: var(--social-size);
     place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    position: relative;
+    z-index: 1;
 }
 
 .social-edge__item i {
-    font-size: 1.35rem;
+    font-size: 1.7rem;
     line-height: 1;
+    transform: translateX(-10px);
+    transition: transform .5s ease;
 }
 
 .social-edge__name {
-    padding-right: 1.05rem;
+    padding-right: 1.35rem;
+    padding-left: .45rem;
     color: #243044;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
     opacity: 0;
-    transform: translateX(8px);
-    transition: opacity .45s ease, transform .5s ease;
+    transition: opacity .5s ease;
 }
-
-.social-edge__item--instagram { --social-open: 172px; }
-.social-edge__item--facebook { --social-open: 158px; }
-.social-edge__item--whatsapp { --social-open: 168px; }
-.social-edge__item--linkedin { --social-open: 154px; }
-.social-edge__item--youtube { --social-open: 152px; }
-.social-edge__item--x { --social-open: 146px; }
-.social-edge__item--behance { --social-open: 156px; }
 
 .social-edge__item--instagram i::before {
     background: linear-gradient(145deg, #f9ce34 0%, #ee2a7b 48%, #6228d7 100%);
@@ -2882,28 +2898,47 @@ body.cursor-visible .cursor-ring {
 .social-edge__item--behance i { color: #E4572E; }
 
 .social-edge__item:focus-visible {
+    transform: translateX(0);
+    outline: none;
+}
+
+.social-edge__item:focus-visible .social-edge__pill {
     width: var(--social-open);
     outline: 3px solid var(--accent);
     outline-offset: 3px;
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, .16);
+}
+
+.social-edge__item:focus-visible .social-edge__icon {
+    box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
+}
+
+.social-edge__item:focus-visible i {
+    transform: translateX(0);
 }
 
 .social-edge__item:focus-visible .social-edge__name {
     opacity: 1;
-    transform: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .social-edge__item:hover {
+        transform: translateX(0);
+    }
+
+    .social-edge__item:hover .social-edge__pill {
         width: var(--social-open);
-        transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, .16);
+    }
+
+    .social-edge__item:hover .social-edge__icon {
+        box-shadow: 0 6px 18px rgba(90, 100, 115, .28);
+    }
+
+    .social-edge__item:hover i {
+        transform: translateX(0);
     }
 
     .social-edge__item:hover .social-edge__name {
         opacity: 1;
-        transform: none;
     }
 }
 
@@ -2921,6 +2956,8 @@ body.cursor-visible .cursor-ring {
 @media (prefers-reduced-motion: reduce) {
     .social-edge,
     .social-edge__item,
+    .social-edge__pill,
+    .social-edge__item i,
     .social-edge__name {
         transition: none;
     }
