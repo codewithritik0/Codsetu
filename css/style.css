@@ -2794,7 +2794,7 @@ body.cursor-visible .cursor-ring {
 
 /* Right-edge social pills. Fixed overlay; below the popup (2000) and confetti (3000). */
 .social-edge {
-    --social-size: 64px;
+    --social-size: 60px;
     --social-open: 232px;
     position: fixed;
     z-index: 1020;
@@ -2865,11 +2865,11 @@ body.cursor-visible .cursor-ring {
 
 .social-edge__item i {
     display: block;
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
     margin: 0;
     padding: 0;
-    font-size: 19px;
+    font-size: 18px;
     line-height: 1;
 }
 
