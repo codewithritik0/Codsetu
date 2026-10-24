@@ -2806,7 +2806,7 @@ body.cursor-visible .cursor-ring {
     align-items: flex-end;
     gap: 14px;
     margin: 0;
-    padding: 42px 10px 42px 0;
+    padding: 42px 0;
     transform: translateY(-50%);
     pointer-events: none;
     overflow: clip;
