@@ -1610,6 +1610,18 @@ body.consultation-popup-open {
     color: #fff
 }
 
+.site-footer .footer-logo {
+    display: inline-block;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px;
+    line-height: 0;
+}
+
+.site-footer .footer-logo img {
+    display: block;
+}
+
 
 
 .site-footer .navbar-brand span,
